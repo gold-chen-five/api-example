@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const SocketServer = require('ws').Server
+const net = require('net')
 
 // open server
 const PORT = process.env.PORT || 3001
@@ -65,3 +66,43 @@ wss.on('connection', (ws,req) => {
     })
 })
 
+//TCP/IP server
+const serverTcp = net.createServer()
+const tcpPORT = 3002
+
+
+const readJsonData = (data,tcp) => {
+    const dataString = data.toString()
+    const dataJson = JSON.parse(dataString)
+    console.log(dataJson)
+    tcp.write('hi')
+}
+
+const readBufferData = (data,tcp) => {
+    console.log(data)
+    data.forEach(buf => {
+        console.log(buf)
+    });
+    tcp.write('hi')
+}
+
+serverTcp.on('connection',tcp => {
+    console.log('tcp client connect')
+
+    tcp.on('data',data => {
+        //readJsonData(data)
+        readBufferData(data,tcp)
+    })
+
+    tcp.on('end',() => {
+        console.log('leave')
+    })
+
+    tcp.on('error', (err) => {
+        console.log(err)
+    })
+})
+
+serverTcp.listen(tcpPORT,() => {
+    console.log(`TCP server open at ${tcpPORT}`)
+})
