@@ -6,5 +6,5 @@ clients 測試:
     1.clients/index.html 開啟live server
 
 clients tcp 測試:
-    1.到clients目錄
-    2.node tcpClients.js
+    1.到api-example目錄
+    2.node api-example/tcpClients.js
